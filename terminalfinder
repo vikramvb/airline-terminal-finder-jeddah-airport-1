@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Find Your Airline Terminal at Jeddah Airport</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            padding: 20px;
+            margin: 0;
+        }
+        h1 {
+            text-align: center;
+        }
+        input[type="text"] {
+            width: 100%;
+            padding: 12px 20px;
+            margin: 8px 0;
+            box-sizing: border-box;
+            font-size: 1em;
+        }
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        ul li {
+            padding: 8px;
+            background-color: #fff;
+            border: 1px solid #ddd;
+            margin-top: -1px;
+            cursor: pointer;
+            font-size: 1em;
+        }
+        ul li:hover {
+            background-color: #f1f1f1;
+        }
+        #resultBox {
+            width: 100%;
+            padding: 20px;
+            background-color: #ffffff;
+            border: 2px solid #4CAF50;
+            border-radius: 5px;
+            margin-top: 20px;
+            text-align: center;
+            font-size: 1.2em;
+            font-weight: bold;
+        }
+        .disclaimer {
+            font-size: 0.8em;
+            margin-top: 20px;
+            text-align: center;
+            color: #555;
+        }
+        @media only screen and (max-width: 600px) {
+            input[type="text"], #resultBox {
+                font-size: 1em;
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>Find Your Airline Terminal at Jeddah Airport</h1>
+    <input type="text" id="airlineInput" placeholder="Start typing airline name..." oninput="suggestAirlines()">
+    <ul id="suggestions"></ul>
+    <div id="resultBox">Terminal result will be shown here</div>
+    
+    <p class="disclaimer">
+        Disclaimer: This terminal information is based on offline data. Please verify with the airline or airport for the current terminal information.
+    </p>
+
+    <script>
+        var airlines = {
+            "Terminal 1": ["saudia", "flynas", "flyadeal", "qatar airways", "kuwait airways", "emirates", "etihad airways", "gulf air", 
+                           "turkish airlines", "oman air", "royal jordanian", "aegean airlines", "mea", "flydubai", "malaysia airlines", 
+                           "royal brunei airlines", "ita airways", "scoot", "ajet", "thai"],
+            "North Terminal": ["spicejet", "air cairo", "wizz air", "jazeera airways", "egyptair", "air astana", "air india express", 
+                               "salamair", "uzbekistan airways", "nesma airlines", "tunisair", "pegasus", "flyegypt", "ethiopian airlines", 
+                               "indigo", "srilankan airlines", "trigana air", "azerbaijan airlines", "yemenia", "daallo airlines", 
+                               "somon air", "scat airlines", "badr airlines"],
+            "Hajj Terminal": ["akasa air", "pia", "airblue", "kam air", "air senegal", "air sial", "turkmenistan airlines", "lion air", 
+                              "air algerie", "biman bangladesh airlines", "batik air", "qanot sharq", "serene air", "air peace", 
+                              "jordan aviation", "airasia", "safe air", "air samarkand", "citilink", "garuda indonesia", 
+                              "max air", "us-bangla airlines", "centrum air", "queen bilqis airways"]
+        };
+
+        function suggestAirlines() {
+            var input = document.getElementById("airlineInput").value.toLowerCase();
+            var suggestions = document.getElementById("suggestions");
+            suggestions.innerHTML = '';
+
+            if (input.length === 0) return;
+
+            var airlineNames = Object.values(airlines).flat();
+            var filtered = airlineNames.filter(function(airline) {
+                return airline.indexOf(input) !== -1;
+            });
+
+            filtered.forEach(function(airline) {
+                var li = document.createElement("li");
+                li.textContent = airline;
+                li.onclick = function() {
+                    document.getElementById("airlineInput").value = airline;
+                    suggestions.innerHTML = '';
+                    findTerminal(); // Automatically display result upon selection
+                };
+                suggestions.appendChild(li);
+            });
+        }
+
+        function findTerminal() {
+            var input = document.getElementById("airlineInput").value.toLowerCase();
+            var resultText = "Airline not found";
+
+            for (var terminal in airlines) {
+                if (airlines[terminal].includes(input)) {
+                    resultText = "Terminal: " + terminal;
+                    break;
+                }
+            }
+            document.getElementById("resultBox").innerHTML = resultText;
+        }
+    </script>
+</body>
+</html>
